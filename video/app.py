@@ -1,12 +1,22 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, jsonify, request
 import cv2
 import time
+import picar
+from picar import back_wheels, front_wheels
+
+picar.setup()
+
+fw = front_wheels.Front_Wheels(debug=False)
+bw = back_wheels.Back_Wheels(debug=False)
+bw.ready()
+fw.ready()
 
 app = Flask(__name__)
 
-camera = cv2.VideoCapture(0)  # use 0 for web camera
-#  for cctv camera use rtsp://username:password@ip_address:554/user=username_password='password'_channel=channel_number_stream=0.sdp' instead of camera
-# for local webcam use cv2.VideoCapture(0)
+camera = cv2.VideoCapture(0)
+
+SPEED = 60
+bw_status = 0
 
 def gen_frames():  # generate frame by frame from camera
     while True:
@@ -32,6 +42,33 @@ def video_feed():
 def index():
     """Video streaming home page."""
     return render_template('index.html')
+
+@app.route('/move', methods=['POST']) 
+def move():
+    data = jsonify(request.json)
+    action = data['action']
+    speed = data['speed']
+    angle = int(data['turn'])
+    print(data)
+    if angle < 45:
+        angle = 45
+    if angle > 135:
+        angle = 135
+    print(data)
+    if action == 'forward':
+        bw.speed = speed
+        fw.turn(angle)
+        bw.forward()
+        bw_status = 1
+    elif action == 'backward':
+        fw.turn(angle)
+        bw.speed = speed
+        bw.backward()
+        bw_status = -1
+    elif action == 'stop':
+        fw.turn(angle)
+        bw.stop()
+        bw_status = 0
 
 
 if __name__ == '__main__':
