@@ -69,6 +69,10 @@ def move():
         fw.turn(angle)
         bw.stop()
         bw_status = 0
+    return jsonify(isError= False,
+                    message= "Success",
+                    statusCode= 200,
+                    data= data), 200
 
 
 if __name__ == '__main__':
