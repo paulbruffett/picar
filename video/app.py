@@ -37,12 +37,6 @@ def video_feed():
     #Video streaming route. Put this in the src attribute of an img tag
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-
-@app.route('/')
-def index():
-    """Video streaming home page."""
-    return render_template('index.html')
-
 @app.route('/move', methods=['POST']) 
 def move():
     data = jsonify(request.json)
@@ -73,6 +67,11 @@ def move():
                     message= "Success",
                     statusCode= 200,
                     data= data), 200
+
+@app.route('/')
+def index():
+    """Video streaming home page."""
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
