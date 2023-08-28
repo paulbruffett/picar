@@ -39,11 +39,11 @@ def video_feed():
 
 @app.route('/move', methods=['POST']) 
 def move():
-    data = jsonify(request.json)
+    data = request.json
+    print(data)
     action = data['action']
     speed = data['speed']
     angle = int(data['turn'])
-    print(data)
     if angle < 45:
         angle = 45
     if angle > 135:
