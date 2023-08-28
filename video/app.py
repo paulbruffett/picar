@@ -41,6 +41,7 @@ def video_feed():
 def move():
     data = request.json
     print(data)
+    speed = 0
     action = data['move']
     speed = data['speed']
     angle = int(data['turn'])
