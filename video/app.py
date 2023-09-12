@@ -41,7 +41,7 @@ def video_feed():
 def move():
     data = request.json
     print(data)
-    action = data['action']
+    action = data['move']
     speed = data['speed']
     angle = int(data['turn'])
     if angle < 45:
