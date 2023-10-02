@@ -54,7 +54,7 @@ def move():
 def index():
     host = stream.get_host().decode('utf-8').split(' ')[0]
     """Video streaming home page."""
-    return render_template('index.html', {'host': host})
+    return render_template('index.html', host=host)
 
 
 if __name__ == '__main__':
